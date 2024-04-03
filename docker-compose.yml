@@ -1,0 +1,32 @@
+version: "2.7"
+services:
+  task-manager:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - task-manager-mysql-net
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/webtech?allowPublicKeyRetrieval=true
+    depends_on:
+      - mysqldb
+
+    volumes:
+      - .m2:/root/.m2
+
+  mysqldb:
+    image: "mysql:8.0"
+    container_name: mysqldb
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - task-manager-mysql-net
+    environment:
+      MYSQL_DATABASE: webtech
+      #MYSQL_USER: root
+      #MYSQL_PASSWORD: pankaj
+      MYSQL_ROOT_PASSWORD: pankaj
+networks:
+  task-manager-mysql-net:
